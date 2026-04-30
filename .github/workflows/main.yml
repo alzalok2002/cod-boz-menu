@@ -1,0 +1,24 @@
+name: Build Menu
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Theos
+        uses: theos/setup-theos@v1
+        with:
+          arch: arm64
+
+      - name: Build
+        run: |
+          make package FINALPACKAGE=1
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Mod-Menu-Dylib
+          path: .theos/obj/debug/*.dylib
