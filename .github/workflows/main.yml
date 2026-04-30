@@ -6,7 +6,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # تحديث لـ v4
 
       - name: Setup Theos
         uses: theos/setup-theos@v1
@@ -18,7 +18,7 @@ jobs:
           make package FINALPACKAGE=1
           
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4 # تحديث لـ v4
         with:
           name: Mod-Menu-Dylib
           path: .theos/obj/debug/*.dylib
