@@ -17,10 +17,17 @@ jobs:
       - name: Setup iOS SDK
         run: |
           mkdir -p ~/theos/sdks
-          # تحميل الـ SDK برابط مباشر مع معالجة التحويلات
-          curl -ksL https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.tar.xz -o ~/theos/sdks/iPhoneOS14.5.sdk.tar.xz
+          # تحميل الـ SDK مع التأكد من تتبع الروابط المحولة (Redirects)
+          curl -L "https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.tar.xz" -o ~/theos/sdks/iPhoneOS14.5.sdk.tar.xz
+          
+          # التحقق من أن الملف ليس صفحة ويب (HTML)
+          if file ~/theos/sdks/iPhoneOS14.5.sdk.tar.xz | grep -q "HTML"; then
+            echo "Error: Downloaded file is HTML, not an archive. Check the URL."
+            exit 1
+          fi
+
           cd ~/theos/sdks
-          tar -xf iPhoneOS14.5.sdk.tar.xz
+          tar -xJf iPhoneOS14.5.sdk.tar.xz # استخدام -xJf لفك ضغط xz بشكل صريح
           rm iPhoneOS14.5.sdk.tar.xz
 
       - name: Build Tweak
