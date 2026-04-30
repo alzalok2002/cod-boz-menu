@@ -8,9 +8,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Theos
+      - name: Setup Theos & ldid
         run: |
-          # نستخدم مسار GITHUB_WORKSPACE لضمان الوصول للملفات
+          # تثبيت أداة التوقيع ldid الضرورية للـ iOS
+          brew install ldid
+          
+          # تحميل الثيوس
           git clone --recursive https://github.com/theos/theos.git $GITHUB_WORKSPACE/theos
           echo "THEOS=$GITHUB_WORKSPACE/theos" >> $GITHUB_ENV
           echo "$GITHUB_WORKSPACE/theos/bin" >> $GITHUB_PATH
@@ -24,7 +27,8 @@ jobs:
 
       - name: Build Tweak
         run: |
-          # تحديد المسار يدوياً أثناء البناء لتفادي "No rule to make target"
+          # البناء مع التأكد من وجود ldid في المسار
+          export PATH=$PATH:$GITHUB_WORKSPACE/theos/bin
           make package FINALPACKAGE=1 THEOS=$GITHUB_WORKSPACE/theos
         env:
           THEOS: ${{ github.workspace }}/theos
