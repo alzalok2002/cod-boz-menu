@@ -1,0 +1,9 @@
+Package: com.yourname.codbozmenu
+Name: COD Boz Menu
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: My Awesome Mod Menu
+Maintainer: YourName
+Author: YourName
+Section: Tweaks

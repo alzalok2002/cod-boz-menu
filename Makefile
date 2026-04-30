@@ -1,0 +1,3 @@
+ARCHS = arm64 arm64e
+DEBUG = 0
+FINALPACKAGE = 1
