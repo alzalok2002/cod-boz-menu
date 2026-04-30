@@ -16,19 +16,15 @@ jobs:
 
       - name: Setup iOS SDK
         run: |
+          # هذه الطريقة تضمن تحميل الـ SDK كملف حقيقي وليس صفحة HTML
           mkdir -p ~/theos/sdks
-          # استخدام رابط الـ Raw المباشر لضمان تحميل ملف حقيقي وليس صفحة HTML
-          curl -kL "https://github.com/theos/sdks/raw/master/iPhoneOS12.2.sdk.tar.xz" -o ~/theos/sdks/sdk.tar.xz
-          
-          # فك الضغط مع تجاهل الأخطاء البسيطة في الصيغة
-          cd ~/theos/sdks
-          tar -xJf sdk.tar.xz
-          rm sdk.tar.xz
+          git clone --depth 1 https://github.com/theos/sdks.git ~/theos/sdks-repo
+          mv ~/theos/sdks-repo/*.sdk ~/theos/sdks/
+          rm -rf ~/theos/sdks-repo
 
       - name: Build Tweak
         run: |
-          # تحديد مسار SDK يدوياً للتأكد من أن المترجم يراه
-          export SDKVERSION=12.2
+          # سنترك الثيوس يختار أفضل SDK متاح تلقائياً
           make package FINALPACKAGE=1
         env:
           THEOS: ~/theos
