@@ -2,7 +2,7 @@
 
 %hook PlayerEntity
 - (int)getPoints {
-    return 999999;
+    return 999999; 
 }
 %end
 
@@ -11,5 +11,6 @@
     return 999;
 }
 - (void)consumeAmmo:(int)amount {
+    // لا تفعل شيئاً لكي لا ينقص الرصاص
 }
 %end
