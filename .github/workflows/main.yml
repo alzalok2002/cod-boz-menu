@@ -1,24 +1,18 @@
-name: Build Menu
-on: [push, pull_request]
+#import <UIKit/UIKit.h>
 
-jobs:
-  build:
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4 # تحديث لـ v4
+// تجميد النقاط عند 999,999
+%hook PlayerEntity
+- (int)getPoints {
+    return 999999;
+}
+%end
 
-      - name: Setup Theos
-        uses: theos/setup-theos@v1
-        with:
-          arch: arm64
-
-      - name: Build
-        run: |
-          make package FINALPACKAGE=1
-          
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4 # تحديث لـ v4
-        with:
-          name: Mod-Menu-Dylib
-          path: .theos/obj/debug/*.dylib
+// ذخيرة لا تنتهي
+%hook WeaponEntity
+- (int)ammoCount {
+    return 999;
+}
+- (void)consumeAmmo:(int)amount {
+    // ترك الدالة فارغة لكي لا ينقص الرصاص
+}
+%end
