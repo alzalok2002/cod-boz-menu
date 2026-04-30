@@ -10,24 +10,24 @@ jobs:
 
       - name: Setup Theos
         run: |
-          git clone --recursive https://github.com/theos/theos.git ~/theos
-          echo "THEOS=~/theos" >> $GITHUB_ENV
-          echo "~/theos/bin" >> $GITHUB_PATH
+          # نستخدم مسار GITHUB_WORKSPACE لضمان الوصول للملفات
+          git clone --recursive https://github.com/theos/theos.git $GITHUB_WORKSPACE/theos
+          echo "THEOS=$GITHUB_WORKSPACE/theos" >> $GITHUB_ENV
+          echo "$GITHUB_WORKSPACE/theos/bin" >> $GITHUB_PATH
 
       - name: Setup iOS SDK
         run: |
-          # هذه الطريقة تضمن تحميل الـ SDK كملف حقيقي وليس صفحة HTML
-          mkdir -p ~/theos/sdks
-          git clone --depth 1 https://github.com/theos/sdks.git ~/theos/sdks-repo
-          mv ~/theos/sdks-repo/*.sdk ~/theos/sdks/
-          rm -rf ~/theos/sdks-repo
+          mkdir -p $GITHUB_WORKSPACE/theos/sdks
+          git clone --depth 1 https://github.com/theos/sdks.git $GITHUB_WORKSPACE/sdks-repo
+          mv $GITHUB_WORKSPACE/sdks-repo/*.sdk $GITHUB_WORKSPACE/theos/sdks/
+          rm -rf $GITHUB_WORKSPACE/sdks-repo
 
       - name: Build Tweak
         run: |
-          # سنترك الثيوس يختار أفضل SDK متاح تلقائياً
-          make package FINALPACKAGE=1
+          # تحديد المسار يدوياً أثناء البناء لتفادي "No rule to make target"
+          make package FINALPACKAGE=1 THEOS=$GITHUB_WORKSPACE/theos
         env:
-          THEOS: ~/theos
+          THEOS: ${{ github.workspace }}/theos
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
