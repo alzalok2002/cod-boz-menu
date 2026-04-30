@@ -10,10 +10,7 @@ jobs:
 
       - name: Setup Theos & ldid
         run: |
-          # تثبيت أداة التوقيع ldid الضرورية للـ iOS
           brew install ldid
-          
-          # تحميل الثيوس
           git clone --recursive https://github.com/theos/theos.git $GITHUB_WORKSPACE/theos
           echo "THEOS=$GITHUB_WORKSPACE/theos" >> $GITHUB_ENV
           echo "$GITHUB_WORKSPACE/theos/bin" >> $GITHUB_PATH
@@ -27,8 +24,6 @@ jobs:
 
       - name: Build Tweak
         run: |
-          # البناء مع التأكد من وجود ldid في المسار
-          export PATH=$PATH:$GITHUB_WORKSPACE/theos/bin
           make package FINALPACKAGE=1 THEOS=$GITHUB_WORKSPACE/theos
         env:
           THEOS: ${{ github.workspace }}/theos
@@ -36,5 +31,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Mod-Menu-Dylib
-          path: .theos/obj/debug/*.dylib
+          name: Mod-Menu-File
+          path: |
+            .theos/obj/*.dylib
+            packages/*.deb
